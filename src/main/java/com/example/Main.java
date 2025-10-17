@@ -135,7 +135,7 @@ public class Main {
                 resetPassword(loggedUser);
                 break;
             case "2":
-
+                supplierMenu();
                 break;
             case "3":
 
@@ -148,5 +148,322 @@ public class Main {
                 break;
             default:
         }
+    }
+
+    public static void supplierMenu() {
+
+        getTopBarView("SUPPLIER MANAGE");
+
+        System.out.println("1. Add Supplier   \t \t \t \t 2. Update Supplier");
+        System.out.println("3. Delete Supplier\t \t \t \t 4. View Supplier");
+        System.out.println("5. Search Supplier\t \t \t \t 6. Home Page");
+
+        supplierSelectOptionMenu(supplierList);
+    }
+
+    public static void supplierSelectOptionMenu(String[][] supplierList) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("enter your choice: ");
+        String selectNumber = sc.nextLine();
+
+        switch (selectNumber) {
+            case "1":
+                addNewSupplierPage();
+                break;
+            case "2":
+                updateSupplierPage();
+                break;
+            case "3":
+                deleteSupplierPage();
+                break;
+            case "4":
+                viewSupplierPage();
+                break;
+            case "5":
+                searchSupplierPage();
+                break;
+            case "6":
+                exitSystem();
+                break;
+            default:
+                System.out.println("Invalid choice, please try again");
+                supplierSelectOptionMenu(supplierList);
+        }
+    }
+
+    public static void printTable(String[] headers, String[][] rows) {
+
+        int columnCount = headers.length + 1;
+
+        int[] columnWidths = new int[columnCount];
+        columnWidths[0] = "#".length();
+
+        for (int i = 1; i < columnCount; i++) {
+            columnWidths[i] = headers[i - 1].length();
+        }
+
+        for (String[] row : rows) {
+            for (int i = 0; i < rows.length; i++) {
+
+                columnWidths[0] = Math.max(columnWidths[0], String.valueOf(i + 1).length());
+            }
+            for (int i = 0; i < headers.length; i++) {
+                if (row[i] != null) {
+                    columnWidths[i + 1] = Math.max(columnWidths[i + 1], row[i].length());
+                }
+            }
+        }
+
+        for (int i = 0; i < columnCount; i++) {
+            columnWidths[i] += 4;
+        }
+
+        StringBuilder formatBuilder = new StringBuilder();
+        formatBuilder.append("|");
+        for (int width : columnWidths) {
+            formatBuilder.append(" %-").append(width).append("s |");
+        }
+        formatBuilder.append("%n");
+        String format = formatBuilder.toString();
+
+        printBorder(columnWidths);
+
+        System.out.printf(format, mergeArrays(new String[]{"#"}, headers));
+
+        printBorder(columnWidths);
+
+        for (int i = 0; i < rows.length; i++) {
+            String[] row = rows[i];
+            Object[] rowObjects = new Object[columnCount];
+            rowObjects[0] = String.valueOf(i + 1); // Row number
+            for (int j = 0; j < headers.length; j++) {
+                rowObjects[j + 1] = row[j] != null ? row[j] : "";
+            }
+            System.out.printf(format, rowObjects);
+        }
+
+        printBorder(columnWidths);
+    }
+
+    public static void printBorder(int[] columnWidths) {
+        System.out.print("+");
+        for (int width : columnWidths) {
+            for (int i = 0; i < width + 2; i++) {
+                System.out.print("-");
+            }
+            System.out.print("+");
+        }
+        System.out.println();
+    }
+
+    public static String[] mergeArrays(String[] first, String[] second) {
+        String[] result = new String[first.length + second.length];
+        System.arraycopy(first, 0, result, 0, first.length);
+        System.arraycopy(second, 0, result, first.length, second.length);
+        return result;
+    }
+
+    public static void searchSupplierPage() {
+        getTopBarView("SEARCH SUPPLIER");
+        searchSupplier();
+    }
+
+    public static void searchSupplier() {
+        System.out.print("Enter existing Supplier ID: ");
+        Scanner sc = new Scanner(System.in);
+
+        String exSupplierId = sc.nextLine();
+        String[] existsSupplier = checkIdAlreadyExists(exSupplierId, supplierList);
+
+        while (existsSupplier == null) {
+            System.out.println("Supplier Not Found!");
+            System.out.print("Enter existing Supplier ID: ");
+            String reEnterSupplierId = sc.nextLine();
+            existsSupplier = checkIdAlreadyExists(reEnterSupplierId, supplierList);
+        }
+
+        System.out.println("Current Supplier ID : " + existsSupplier[0]);
+        System.out.println("Current Supplier Name : " + existsSupplier[1]);
+
+        System.out.print("Do you want to search another supplier? (Y/N) ");
+        String searchSupplier = sc.nextLine();
+
+        if (searchSupplier.equalsIgnoreCase("Y")) {
+            searchSupplier();
+        } else {
+            supplierMenu();
+        }
+    }
+
+    public static void viewSupplierPage() {
+        getTopBarView("VIEW SUPPLIER");
+        String [] headers ={"SUPPLIER ID", "SUPPLIER NAME"};
+        printTable(headers, supplierList);
+        supplierMenu();
+    }
+
+    public static void addNewSupplierPage() {
+        getTopBarView("ADD SUPPLIER");
+        addNewSupplier();
+    }
+
+    public static void updateSupplierPage() {
+        getTopBarView("UPDATE SUPPLIER");
+        updateNewSupplier();
+    }
+
+    public static void deleteSupplierPage() {
+        getTopBarView("DELETE SUPPLIER");
+        deleteSupplier();
+    }
+
+    public static void deleteSupplier() {
+        System.out.print("Enter existing Supplier ID: ");
+        Scanner sc = new Scanner(System.in);
+
+        String exSupplierId = sc.nextLine();
+        String[] existsSupplier = checkIdAlreadyExists(exSupplierId, supplierList);
+
+        while (existsSupplier == null) {
+            System.out.println("Existing Supplier Not Found!");
+            System.out.print("Enter existing Supplier ID: ");
+            String reEnterSupplierId = sc.nextLine();
+            existsSupplier = checkIdAlreadyExists(reEnterSupplierId, supplierList);
+        }
+
+        System.out.println("Current Supplier ID : " + existsSupplier[0]);
+        System.out.println("Current Supplier Name : " + existsSupplier[1]);
+
+        System.out.print("Do you want to delete this supplier? (Y/N) ");
+        String deleteSupplier = sc.nextLine();
+
+        if (deleteSupplier.equalsIgnoreCase("Y")) {
+            for (int i = 0; i < supplierList.length; i++) {
+                if (supplierList[i][0] != null && supplierList[i][0].equalsIgnoreCase(exSupplierId)) {
+                    supplierList = deleteIndex(supplierList, i);
+                    break;
+                }
+            }
+            System.out.println("Supplier deleted successfully!");
+            System.out.print("Do you want to delete another supplier? (Y/N) ");
+            String updateAnotherSupplier = sc.nextLine();
+            if (updateAnotherSupplier.equalsIgnoreCase("Y")) {
+                deleteSupplier();
+            } else {
+                supplierMenu();
+            }
+        } else {
+            deleteSupplier();
+        }
+    }
+
+    public static void updateNewSupplier() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter existing Supplier ID: ");
+        String exSupplierId = sc.nextLine();
+
+        String[] existsSupplier = checkIdAlreadyExists(exSupplierId, supplierList);
+
+        while (existsSupplier == null) {
+            System.out.println("Existing Supplier Not Found!");
+            System.out.print("Enter existing Supplier ID: ");
+            String reEnterSupplierId = sc.nextLine();
+            existsSupplier = checkIdAlreadyExists(reEnterSupplierId, supplierList);
+        }
+
+        System.out.println("Current Supplier name is: " + existsSupplier[1]);
+
+        System.out.print("Do you want to update supplier Name? (Y/N) ");
+        String updateName = sc.nextLine();
+
+        if (updateName.equalsIgnoreCase("Y")) {
+            System.out.print("Enter new Supplier Name: ");
+            String newSupplierName = sc.nextLine();
+            updateSupplierName(newSupplierName, existsSupplier[0]);
+            System.out.println("New Supplier Name updated successfully!");
+            System.out.print("Do you want to update another supplier? (Y/N) ");
+            String updateAnotherSupplier = sc.nextLine();
+            if (updateAnotherSupplier.equalsIgnoreCase("Y")) {
+                updateNewSupplier();
+            } else {
+                supplierMenu();
+            }
+        } else {
+            updateSupplierPage();
+        }
+    }
+
+    public static void addNewSupplier() {
+
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Supplier ID: ");
+        String supplierId = sc.nextLine();
+
+        while (checkIdAlreadyExists(supplierId, supplierList) != null) {
+            System.out.println("Supplier ID already exists, try another supplier Id!");
+            System.out.print("Supplier ID: ");
+            supplierId = sc.nextLine();
+        }
+
+        System.out.print("Supplier Name: ");
+        String supplierName = sc.nextLine();
+        supplierList = addNewSupplier(supplierId, supplierName);
+        System.out.print("Supplier successfully added!, Do you want to add another Supplier? (Y/N)");
+
+        String homePage = sc.nextLine();
+
+        if (homePage.equalsIgnoreCase("Y")) {
+            addNewSupplier();
+        } else {
+            supplierMenu();
+        }
+    }
+
+    public static String[][] addNewSupplier(String supplierId, String name) {
+        String[] newSupplier = {supplierId, name};
+        return addElement(supplierList, newSupplier);
+    }
+
+    public static void updateSupplierName(String name, String id) {
+        for (int i = 0; i < supplierList.length; i++) {
+            if (supplierList[i][0] != null && supplierList[i][0].equalsIgnoreCase(id)) {
+                supplierList[i][1] = name;
+                break;
+            }
+        }
+    }
+
+    public static String[][] addElement(String[][] original, String[] newElement) {
+        int originalLength = original.length;
+        String[][] newArray = new String[originalLength + 1][2];
+        System.arraycopy(original, 0, newArray, 0, originalLength);
+        newArray[originalLength] = newElement;
+        return newArray;
+    }
+
+    public static String[][] deleteIndex(String[][] original, int index) {
+        if (index < 0 || index >= original.length) {
+            throw new IllegalArgumentException("Index out of bounds");
+        }
+
+        String[][] newArray = new String[original.length - 1][2];
+
+        for (int i = 0, j = 0; i < original.length; i++) {
+            if (i != index) {
+                newArray[j++] = original[i];
+            }
+        }
+
+        return newArray;
+    }
+
+    public static String[] checkIdAlreadyExists(String id, String [] [] list) {
+        if (list==null) return null;
+        for (String[] singleList : list) {
+            if (singleList[0] != null && singleList[0].equalsIgnoreCase(id)) {
+                return singleList;
+            }
+        }
+        return null;
     }
 }
