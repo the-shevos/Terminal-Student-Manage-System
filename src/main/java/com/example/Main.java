@@ -37,7 +37,7 @@ public class Main {
         }
 
         if (userIndex[0] != null) {
-
+            passwordCheck(userIndex);
         } else {
             System.out.println("Oops, Your username is incorrect, please try again");
             checkUserName();
@@ -55,5 +55,61 @@ public class Main {
         System.out.println("+--------------------------------------" + str + "+");
         System.out.println("|                   " + topic + "                   |");
         System.out.println("+--------------------------------------" + str + "+");
+    }
+
+    public static void passwordCheck(String[] userIndex) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter Your Password: ");
+        String password = sc.nextLine();
+
+        if (userIndex[1].equals(password)) {
+            System.out.println("Successfully logged in");
+        } else {
+            System.out.println("Oops, Your password is incorrect, please try again");
+            passwordCheck(userIndex);
+        }
+    }
+
+    public static void resetPassword(String[] userIndex) {
+        getTopBarView("CREDENTIAL MANGE");
+
+        System.out.println("Please re enter your username and password to reset your password");
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter your username: ");
+        String userName = sc.nextLine();
+
+        while (!userIndex[0].equalsIgnoreCase(userName)) {
+            System.out.println("Invalid username, please try again");
+            System.out.print("Enter your username: ");
+            userName = sc.nextLine();
+        }
+
+
+        System.out.print("Enter your current password: ");
+        String password = sc.nextLine();
+
+        while (!userIndex[1].equalsIgnoreCase(password)) {
+            System.out.println("Invalid password, please try again");
+            System.out.print("Enter your current password: ");
+            password = sc.nextLine();
+        }
+
+        System.out.print("Please enter your new password: ");
+        String newPassword = sc.nextLine();
+        userIndex[1] = newPassword;
+
+        for (int i = 0; i < userList.length; i++) {
+            if (userList[i][0] != null && userList[i][0].equalsIgnoreCase(userName)) {
+                userList[i][1] = newPassword;
+            }
+        }
+
+        System.out.print("Do you want to go home page? (Y/N): ");
+        String homePage = sc.nextLine();
+        if (homePage.equalsIgnoreCase("Y")) {
+
+        } else {
+            System.exit(0);
+        }
     }
 }
