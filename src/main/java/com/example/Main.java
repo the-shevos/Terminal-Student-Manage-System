@@ -466,4 +466,46 @@ public class Main {
         }
         return null;
     }
+
+    public static void stockMenu() {
+
+        getTopBarView("STOCK MANAGE");
+
+        categoryList = new String[][]{{"1", "Mouse"}, {"2", "keyBord"}};
+        itemList = new String[][]{{"001", "1", "Mouse", "item description", "400", "20"}, {"002", "1", "keyBord", "item description", "120", "49"}};
+
+        System.out.println("1. Manage Item Category  \t \t \t \t 2. Add Item");
+        System.out.println("3. Get Item Supplier Wise\t \t \t \t 4. View Item");
+        System.out.println("5. Rank Items Unit Price \t \t \t \t 6. Home Page");
+
+        stockMenuSelectOptionMenu();
+    }
+
+    public static void stockMenuSelectOptionMenu() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("enter your choice: ");
+        String selectNumber = sc.nextLine();
+
+        switch (selectNumber) {
+            case "1":
+
+                break;
+            case "2":
+
+                break;
+            case "3":
+
+                break;
+            case "4":
+
+                break;
+            case "5":
+
+                break;
+            case "6":
+                welComePage();
+                break;
+            default:
+        }
+    }
 }
