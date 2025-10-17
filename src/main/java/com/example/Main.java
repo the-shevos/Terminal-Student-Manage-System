@@ -9,8 +9,10 @@ public class Main {
     public static String[][] itemList = new String[50][2];
     public static String[] loggedUser;
 
+    public static Scanner sc = new Scanner(System.in);
+
     public static void main(String[] args) {
-        userList = new String[][]{{"user", "1234"}};
+        userList = new String[][]{{"sachi", "1234"}};
 
         welComePage();
     }
@@ -25,7 +27,6 @@ public class Main {
     }
 
     public static String[] checkUserName() {
-        Scanner sc = new Scanner(System.in);
         System.out.print("Enter User Name: ");
         String userName = sc.nextLine();
         String[] userIndex = new String[2];
@@ -59,7 +60,6 @@ public class Main {
     }
 
     public static void passwordCheck(String[] userIndex) {
-        Scanner sc = new Scanner(System.in);
         System.out.print("Enter Your Password: ");
         String password = sc.nextLine();
 
@@ -75,7 +75,6 @@ public class Main {
         getTopBarView("CREDENTIAL MANGE");
 
         System.out.println("Please re enter your username and password to reset your password");
-        Scanner sc = new Scanner(System.in);
         System.out.print("Enter your username: ");
         String userName = sc.nextLine();
 
@@ -84,7 +83,6 @@ public class Main {
             System.out.print("Enter your username: ");
             userName = sc.nextLine();
         }
-
 
         System.out.print("Enter your current password: ");
         String password = sc.nextLine();
@@ -126,7 +124,6 @@ public class Main {
         System.out.println("3. Stock Management       \t \t \t \t 4. Log out");
         System.out.println("5. Exit the system");
 
-        Scanner sc = new Scanner(System.in);
         System.out.print("enter your choice: ");
         String selectNumber = sc.nextLine();
 
@@ -138,10 +135,11 @@ public class Main {
                 supplierMenu();
                 break;
             case "3":
-
+                stockMenu();
                 break;
             case "4":
-                loginPage();
+                loggedUser = loginPage();
+                welComePage();
                 break;
             case "5":
                 exitSystem();
@@ -162,7 +160,6 @@ public class Main {
     }
 
     public static void supplierSelectOptionMenu(String[][] supplierList) {
-        Scanner sc = new Scanner(System.in);
         System.out.print("enter your choice: ");
         String selectNumber = sc.nextLine();
 
@@ -183,7 +180,7 @@ public class Main {
                 searchSupplierPage();
                 break;
             case "6":
-                exitSystem();
+                welComePage();
                 break;
             default:
                 System.out.println("Invalid choice, please try again");
@@ -270,7 +267,6 @@ public class Main {
 
     public static void searchSupplier() {
         System.out.print("Enter existing Supplier ID: ");
-        Scanner sc = new Scanner(System.in);
 
         String exSupplierId = sc.nextLine();
         String[] existsSupplier = checkIdAlreadyExists(exSupplierId, supplierList);
@@ -319,7 +315,6 @@ public class Main {
 
     public static void deleteSupplier() {
         System.out.print("Enter existing Supplier ID: ");
-        Scanner sc = new Scanner(System.in);
 
         String exSupplierId = sc.nextLine();
         String[] existsSupplier = checkIdAlreadyExists(exSupplierId, supplierList);
@@ -358,7 +353,6 @@ public class Main {
     }
 
     public static void updateNewSupplier() {
-        Scanner sc = new Scanner(System.in);
         System.out.print("Enter existing Supplier ID: ");
         String exSupplierId = sc.nextLine();
 
@@ -394,8 +388,6 @@ public class Main {
     }
 
     public static void addNewSupplier() {
-
-        Scanner sc = new Scanner(System.in);
         System.out.print("Supplier ID: ");
         String supplierId = sc.nextLine();
 
@@ -457,16 +449,6 @@ public class Main {
         return newArray;
     }
 
-    public static String[] checkIdAlreadyExists(String id, String [] [] list) {
-        if (list==null) return null;
-        for (String[] singleList : list) {
-            if (singleList[0] != null && singleList[0].equalsIgnoreCase(id)) {
-                return singleList;
-            }
-        }
-        return null;
-    }
-
     public static void stockMenu() {
 
         getTopBarView("STOCK MANAGE");
@@ -482,25 +464,24 @@ public class Main {
     }
 
     public static void stockMenuSelectOptionMenu() {
-        Scanner sc = new Scanner(System.in);
         System.out.print("enter your choice: ");
         String selectNumber = sc.nextLine();
 
         switch (selectNumber) {
             case "1":
-
+                categoryMenu();
                 break;
             case "2":
-
+                addItemPage();
                 break;
             case "3":
-
+                searchSupplerWisePage();
                 break;
             case "4":
-
+                groupItemCategoryWisePage();
                 break;
             case "5":
-
+                rankByUnitPricePage();
                 break;
             case "6":
                 welComePage();
@@ -520,7 +501,6 @@ public class Main {
     }
 
     public static void categorySelectOptionAction(String[][] supplierList) {
-        Scanner sc = new Scanner(System.in);
         System.out.print("enter your choice: ");
         String selectNumber = sc.nextLine();
 
@@ -550,7 +530,6 @@ public class Main {
 
     private static void addNewCategory(){
         System.out.print("Enter the new category name: ");
-        Scanner sc = new Scanner(System.in);
         String categoryName = sc.nextLine();
 
         int lastIndex = categoryList.length - 1;
@@ -577,7 +556,6 @@ public class Main {
     }
 
     public static void updateCategory(){
-        Scanner sc = new Scanner(System.in);
         System.out.print("Enter existing Category ID: ");
         String existingCategoryId = sc.nextLine();
 
@@ -619,7 +597,6 @@ public class Main {
 
     public static void deleteCategory() {
         System.out.print("Enter existing Category ID: ");
-        Scanner sc = new Scanner(System.in);
 
         String exSupplierId = sc.nextLine();
         String[] existsSupplier = checkIdAlreadyExists(exSupplierId, categoryList);
@@ -640,7 +617,7 @@ public class Main {
         if (deleteSupplier.equalsIgnoreCase("Y")) {
             for (int i = 0; i < categoryList.length; i++) {
                 if (categoryList[i][0] != null && categoryList[i][0].equalsIgnoreCase(exSupplierId)) {
-                    supplierList = deleteIndex(categoryList, i);
+                    categoryList = deleteIndex(categoryList, i);
                     break;
                 }
             }
@@ -666,7 +643,6 @@ public class Main {
 
         if (categoryList.length == 0) {
             System.out.println("Oops!, It seems that you don't have any category in the system");
-            Scanner sc = new Scanner(System.in);
             String addCategory = sc.nextLine();
             System.out.print("Do you want to add new Category? (Y/N) ");
             if (addCategory.equalsIgnoreCase("Y")) {
@@ -678,7 +654,6 @@ public class Main {
 
         if (supplierList.length == 0) {
             System.out.println("Oops!, It seems that you don't have any supplier in the system");
-            Scanner sc = new Scanner(System.in);
             String addSupplier = sc.nextLine();
             System.out.print("Do you want to add new Supplier? (Y/N) ");
             if (addSupplier.equalsIgnoreCase("Y")) {
@@ -687,7 +662,7 @@ public class Main {
                 stockMenu();
             }
         }
-        Scanner sc = new Scanner(System.in);
+
         System.out.print("Item Code : ");
         String itemCode = sc.nextLine();
         String[] exists = checkIdAlreadyExists(itemCode, itemList);
@@ -748,6 +723,29 @@ public class Main {
         }
     }
 
+    public static void searchSupplerWisePage(){
+        getTopBarView("SEARCH SUPPLIER WISE");
+        searchSupplerWise();
+    }
+
+    public static void searchSupplerWise(){
+        System.out.print("Enter suppler ID: ");
+        String searchSupplerId = sc.nextLine();
+        String[] existsSupplier = checkIdAlreadyExists(searchSupplerId, supplierList);
+
+        while (existsSupplier == null) {
+            System.out.println("Existing Supplier Not Found!");
+            System.out.print("Enter existing Supplier ID: ");
+            String reEnterSupplierId = sc.nextLine();
+            existsSupplier = checkIdAlreadyExists(reEnterSupplierId, supplierList);
+        }
+        System.out.println("SUPPLER NAME : " + existsSupplier[1]);
+
+        String[][] filteredItemList = filterItem(itemList, searchSupplerId,1);
+        String [] headers ={"ITEM CODE", "SUPPLIER ID", "CATEGORY", "DESCRIPTION", "PRICE", "QTY"};
+        printTable(headers, filteredItemList);
+    }
+
     public static void groupItemCategoryWisePage(){
         getTopBarView("GROUP CATEGORY WISE");
         groupItemCategoryWise();
@@ -806,28 +804,13 @@ public class Main {
         return filteredList;
     }
 
-    public static void searchSupplerWisePage(){
-        getTopBarView("SEARCH SUPPLIER WISE");
-        searchSupplerWise();
-    }
-
-    public static void searchSupplerWise(){
-        System.out.print("Enter suppler ID: ");
-        Scanner sc = new Scanner(System.in);
-        String searchSupplerId = sc.nextLine();
-        String[] existsSupplier = checkIdAlreadyExists(searchSupplerId, supplierList);
-
-        while (existsSupplier == null) {
-            System.out.println("Existing Supplier Not Found!");
-            System.out.print("Enter existing Supplier ID: ");
-            String reEnterSupplierId = sc.nextLine();
-            existsSupplier = checkIdAlreadyExists(reEnterSupplierId, supplierList);
+    public static String[] checkIdAlreadyExists(String id, String [] [] list) {
+        if (list==null) return null;
+        for (String[] singleList : list) {
+            if (singleList[0] != null && singleList[0].equalsIgnoreCase(id)) {
+                return singleList;
+            }
         }
-        System.out.println("SUPPLER NAME : " + existsSupplier[1]);
-
-        String[][] filteredItemList = filterItem(itemList, searchSupplerId,1);
-        String [] headers ={"ITEM CODE", "SUPPLIER ID", "CATEGORY", "DESCRIPTION", "PRICE", "QTY"};
-        printTable(headers, filteredItemList);
+        return null;
     }
-
 }
