@@ -748,30 +748,6 @@ public class Main {
         }
     }
 
-    public static void searchSupplerWisePage(){
-        getTopBarView("SEARCH SUPPLIER WISE");
-        searchSupplerWise();
-    }
-
-    public static void searchSupplerWise(){
-        System.out.print("Enter suppler ID: ");
-        Scanner sc = new Scanner(System.in);
-        String searchSupplerId = sc.nextLine();
-        String[] existsSupplier = checkIdAlreadyExists(searchSupplerId, supplierList);
-
-        while (existsSupplier == null) {
-            System.out.println("Existing Supplier Not Found!");
-            System.out.print("Enter existing Supplier ID: ");
-            String reEnterSupplierId = sc.nextLine();
-            existsSupplier = checkIdAlreadyExists(reEnterSupplierId, supplierList);
-        }
-        System.out.println("SUPPLER NAME : " + existsSupplier[1]);
-
-        String[][] filteredItemList = filterItem(itemList, searchSupplerId,1);
-        String [] headers ={"ITEM CODE", "SUPPLIER ID", "CATEGORY", "DESCRIPTION", "PRICE", "QTY"};
-        printTable(headers, filteredItemList);
-    }
-
     public static void groupItemCategoryWisePage(){
         getTopBarView("GROUP CATEGORY WISE");
         groupItemCategoryWise();
@@ -828,6 +804,30 @@ public class Main {
         }
 
         return filteredList;
+    }
+
+    public static void searchSupplerWisePage(){
+        getTopBarView("SEARCH SUPPLIER WISE");
+        searchSupplerWise();
+    }
+
+    public static void searchSupplerWise(){
+        System.out.print("Enter suppler ID: ");
+        Scanner sc = new Scanner(System.in);
+        String searchSupplerId = sc.nextLine();
+        String[] existsSupplier = checkIdAlreadyExists(searchSupplerId, supplierList);
+
+        while (existsSupplier == null) {
+            System.out.println("Existing Supplier Not Found!");
+            System.out.print("Enter existing Supplier ID: ");
+            String reEnterSupplierId = sc.nextLine();
+            existsSupplier = checkIdAlreadyExists(reEnterSupplierId, supplierList);
+        }
+        System.out.println("SUPPLER NAME : " + existsSupplier[1]);
+
+        String[][] filteredItemList = filterItem(itemList, searchSupplerId,1);
+        String [] headers ={"ITEM CODE", "SUPPLIER ID", "CATEGORY", "DESCRIPTION", "PRICE", "QTY"};
+        printTable(headers, filteredItemList);
     }
 
 }
