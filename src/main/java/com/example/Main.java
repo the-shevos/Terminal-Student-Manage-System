@@ -657,4 +657,94 @@ public class Main {
         }
     }
 
+    public static void addItemPage(){
+        getTopBarView("ADD ITEM");
+        addItem();
+    }
+
+    public static void addItem(){
+
+        if (categoryList.length == 0) {
+            System.out.println("Oops!, It seems that you don't have any category in the system");
+            Scanner sc = new Scanner(System.in);
+            String addCategory = sc.nextLine();
+            System.out.print("Do you want to add new Category? (Y/N) ");
+            if (addCategory.equalsIgnoreCase("Y")) {
+                addNewCategory();
+            }else {
+                stockMenu();
+            }
+        }
+
+        if (supplierList.length == 0) {
+            System.out.println("Oops!, It seems that you don't have any supplier in the system");
+            Scanner sc = new Scanner(System.in);
+            String addSupplier = sc.nextLine();
+            System.out.print("Do you want to add new Supplier? (Y/N) ");
+            if (addSupplier.equalsIgnoreCase("Y")) {
+                addNewSupplier();
+            }else {
+                stockMenu();
+            }
+        }
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Item Code : ");
+        String itemCode = sc.nextLine();
+        String[] exists = checkIdAlreadyExists(itemCode, itemList);
+
+        while (exists != null) {
+            System.out.println("Item Code already exists!");
+            System.out.print("Item Code : ");
+            itemCode = sc.nextLine();
+            exists = checkIdAlreadyExists(itemCode, itemList);
+        }
+
+        System.out.println("Supplier List");
+        String [] headers ={"SUPPLIER ID", "SUPPLIER NAME"};
+        printTable(headers, supplierList);
+        System.out.print("Enter Supplier No: ");
+        int supplierId = sc.nextInt();
+
+        if (supplierList.length<supplierId){
+            System.out.println("Supplier Not Found!, Enter Valid Supplier No");
+            System.out.print("Enter Supplier No: ");
+            supplierId = sc.nextInt();
+        }
+        String sid = supplierList[supplierId-1][0];
+
+        System.out.println("Category List");
+        String [] categoryHeaders ={"CATEGORY ID", "CATEGORY NAME"};
+        printTable(categoryHeaders, categoryList);
+        System.out.print("Enter Category No: ");
+        int categoryId = sc.nextInt();
+
+        while (categoryList.length<categoryId){
+            System.out.println("Category Not Found!, Enter Valid Category No");
+            System.out.print("Enter Category No: ");
+            categoryId = sc.nextInt();
+        }
+
+        String cName = categoryList[categoryId-1][1];
+
+        System.out.print("Description : ");
+        String description = sc.nextLine();
+
+        System.out.print("Unit Price : ");
+        double price = sc.nextDouble();
+
+        System.out.print("Qty of Units : ");
+        int qty = sc.nextInt();
+
+        String [] item ={itemCode,sid, cName, description, String.valueOf(price), String.valueOf(qty)};
+        itemList = addElement(itemList, item);
+
+        System.out.println("Item added successfully!");
+        System.out.println("Do you want to add another item? (Y/N) ");
+        String addAnotherItem = sc.nextLine();
+        if (addAnotherItem.equalsIgnoreCase("Y")) {
+            addItem();
+        }else{
+            stockMenu();
+        }
+    }
 }
