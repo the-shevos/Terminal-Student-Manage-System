@@ -747,4 +747,87 @@ public class Main {
             stockMenu();
         }
     }
+
+    public static void searchSupplerWisePage(){
+        getTopBarView("SEARCH SUPPLIER WISE");
+        searchSupplerWise();
+    }
+
+    public static void searchSupplerWise(){
+        System.out.print("Enter suppler ID: ");
+        Scanner sc = new Scanner(System.in);
+        String searchSupplerId = sc.nextLine();
+        String[] existsSupplier = checkIdAlreadyExists(searchSupplerId, supplierList);
+
+        while (existsSupplier == null) {
+            System.out.println("Existing Supplier Not Found!");
+            System.out.print("Enter existing Supplier ID: ");
+            String reEnterSupplierId = sc.nextLine();
+            existsSupplier = checkIdAlreadyExists(reEnterSupplierId, supplierList);
+        }
+        System.out.println("SUPPLER NAME : " + existsSupplier[1]);
+
+        String[][] filteredItemList = filterItem(itemList, searchSupplerId,1);
+        String [] headers ={"ITEM CODE", "SUPPLIER ID", "CATEGORY", "DESCRIPTION", "PRICE", "QTY"};
+        printTable(headers, filteredItemList);
+    }
+
+    public static void groupItemCategoryWisePage(){
+        getTopBarView("GROUP CATEGORY WISE");
+        groupItemCategoryWise();
+    }
+
+    public static void groupItemCategoryWise(){
+        for(String [] category : categoryList){
+            System.out.println(category[1]);
+
+            String[][] filteredItemList = filterItem(itemList, category[1], 2);
+            String [] headers ={"ITEM CODE", "SUPPLIER ID", "CATEGORY", "DESCRIPTION", "PRICE", "QTY"};
+            printTable(headers, filteredItemList);
+        }
+    }
+
+    public static void rankByUnitPricePage(){
+        getTopBarView("RANK BY UNIT PRICE");
+        rankByUnitPrice();
+    }
+
+    public static void rankByUnitPrice(){
+
+        for (int i = 0; i < itemList.length - 1; i++) {
+            for (int j = i + 1; j < itemList.length; j++) {
+                float price1 = Float.parseFloat(itemList[i][4]);
+                float price2 = Float.parseFloat(itemList[j][4]);
+                if (price1 > price2) {
+
+                    String[] temp = itemList[i];
+                    itemList[i] = itemList[j];
+                    itemList[j] = temp;
+                }
+            }
+        }
+
+        String [] headers ={"ITEM CODE", "SUPPLIER ID", "CATEGORY", "DESCRIPTION", "PRICE", "QTY"};
+        printTable(headers, itemList);
+    }
+
+    public static String[][] filterItem(String[][] list, String id,int number) {
+        int count = 0;
+        for (String[] supplier : list) {
+            if (supplier[number]!=null && supplier[number].equalsIgnoreCase(id)) {
+                count++;
+            }
+        }
+
+        String[][] filteredList = new String[count][2];
+        int index = 0;
+        for (String[] supplier : list) {
+            if (supplier[number]!=null && supplier[number].equalsIgnoreCase(id)) {
+                filteredList[index++] = supplier;
+            }
+        }
+
+        return filteredList;
+    }
+
 }
