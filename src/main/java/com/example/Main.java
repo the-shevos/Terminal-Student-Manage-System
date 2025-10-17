@@ -12,6 +12,7 @@ public class Main {
     public static void main(String[] args) {
         userList = new String[][]{{"user", "1234"}};
 
+        welComePage();
     }
 
     public static void exitSystem() {
@@ -107,9 +108,45 @@ public class Main {
         System.out.print("Do you want to go home page? (Y/N): ");
         String homePage = sc.nextLine();
         if (homePage.equalsIgnoreCase("Y")) {
-
+            welComePage();
         } else {
             System.exit(0);
+        }
+    }
+
+    public static void welComePage() {
+
+        if (loggedUser == null) {
+            loggedUser = loginPage();
+        }
+
+        supplierList = new String[][]{{"1", "Kasun"}, {"2", "Nayana"}};
+        getTopBarView("WELCOME TO  STOCK MANAGEMENT SYSTEM");
+        System.out.println("1. Change the Credentials \t \t \t \t 2. Supplier Management");
+        System.out.println("3. Stock Management       \t \t \t \t 4. Log out");
+        System.out.println("5. Exit the system");
+
+        Scanner sc = new Scanner(System.in);
+        System.out.print("enter your choice: ");
+        String selectNumber = sc.nextLine();
+
+        switch (selectNumber) {
+            case "1":
+                resetPassword(loggedUser);
+                break;
+            case "2":
+
+                break;
+            case "3":
+
+                break;
+            case "4":
+                loginPage();
+                break;
+            case "5":
+                exitSystem();
+                break;
+            default:
         }
     }
 }
