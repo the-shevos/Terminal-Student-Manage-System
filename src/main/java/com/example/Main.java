@@ -508,4 +508,153 @@ public class Main {
             default:
         }
     }
+
+    public static void categoryMenu() {
+
+        getTopBarView("ADD CATEGORY");
+
+        System.out.println("1. Add Category   \t \t \t \t 2. Update Category");
+        System.out.println("3. Delete Category\t \t \t \t 4. Stock Manage");
+
+        categorySelectOptionAction(supplierList);
+    }
+
+    public static void categorySelectOptionAction(String[][] supplierList) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("enter your choice: ");
+        String selectNumber = sc.nextLine();
+
+        switch (selectNumber) {
+            case "1":
+                addNewCategoryPage();
+                break;
+            case "2":
+                updateCategoryPage();
+                break;
+            case "3":
+                deleteCategoryPage();
+                break;
+            case "4":
+                stockMenu();
+                break;
+            default:
+                System.out.println("Invalid choice, please try again");
+                supplierSelectOptionMenu(supplierList);
+        }
+    }
+
+    public static void addNewCategoryPage(){
+        getTopBarView("ADD CATEGORY");
+        addNewCategory();
+    }
+
+    private static void addNewCategory(){
+        System.out.print("Enter the new category name: ");
+        Scanner sc = new Scanner(System.in);
+        String categoryName = sc.nextLine();
+
+        int lastIndex = categoryList.length - 1;
+        int lastId  = Integer.parseInt(categoryList[lastIndex][0])+1;
+
+        String [] newCategoryData = {String.valueOf(lastId),categoryName};
+        categoryList = addElement(categoryList, newCategoryData);
+        System.out.println("Category successfully added!");
+
+        System.out.println("Category ID : " + lastId);
+        System.out.println("Category Name : " + categoryName);
+
+        System.out.println("Do you want to add another Category? (Y/N)");
+        if (sc.nextLine().equalsIgnoreCase("Y")) {
+            addNewCategory();
+        }else {
+            categoryMenu();
+        }
+    }
+
+    public static void updateCategoryPage(){
+        getTopBarView("UPDATE CATEGORY");
+        updateCategory();
+    }
+
+    public static void updateCategory(){
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter existing Category ID: ");
+        String existingCategoryId = sc.nextLine();
+
+        String[] existsCategory = checkIdAlreadyExists(existingCategoryId, categoryList);
+
+        while (existsCategory == null) {
+            System.out.println("Existing Category Not Found!");
+            System.out.print("Enter existing Category ID: ");
+            String reEnterSupplierId = sc.nextLine();
+            existsCategory = checkIdAlreadyExists(reEnterSupplierId, categoryList);
+        }
+
+        System.out.println("Current Category name is: " + existsCategory[1]);
+
+        System.out.print("Do you want to update category Name? (Y/N) ");
+        String updateName = sc.nextLine();
+
+        if (updateName.equalsIgnoreCase("Y")) {
+            System.out.print("Enter new Category Name: ");
+            String newSupplierName = sc.nextLine();
+            updateSupplierName(newSupplierName, existsCategory[0]);
+            System.out.println("Category Name updated successfully!");
+            System.out.print("Do you want to update another supplier? (Y/N) ");
+            String updateAnotherSupplier = sc.nextLine();
+            if (updateAnotherSupplier.equalsIgnoreCase("Y")) {
+                updateCategory();
+            } else {
+                categoryMenu();
+            }
+        } else {
+            updateSupplierPage();
+        }
+    }
+
+    public static void deleteCategoryPage() {
+        getTopBarView("DELETE CATEGORY");
+        deleteCategory();
+    }
+
+    public static void deleteCategory() {
+        System.out.print("Enter existing Category ID: ");
+        Scanner sc = new Scanner(System.in);
+
+        String exSupplierId = sc.nextLine();
+        String[] existsSupplier = checkIdAlreadyExists(exSupplierId, categoryList);
+
+        while (existsSupplier == null) {
+            System.out.println("Existing Supplier Not Found!");
+            System.out.print("Enter existing Supplier ID: ");
+            String reEnterSupplierId = sc.nextLine();
+            existsSupplier = checkIdAlreadyExists(reEnterSupplierId, categoryList);
+        }
+
+        System.out.println("Current Category ID : " + existsSupplier[0]);
+        System.out.println("Current Category Name : " + existsSupplier[1]);
+
+        System.out.print("Do you want to delete this category? (Y/N) ");
+        String deleteSupplier = sc.nextLine();
+
+        if (deleteSupplier.equalsIgnoreCase("Y")) {
+            for (int i = 0; i < categoryList.length; i++) {
+                if (categoryList[i][0] != null && categoryList[i][0].equalsIgnoreCase(exSupplierId)) {
+                    supplierList = deleteIndex(categoryList, i);
+                    break;
+                }
+            }
+            System.out.println("Category deleted successfully!");
+            System.out.print("Do you want to delete another category? (Y/N) ");
+            String updateAnotherSupplier = sc.nextLine();
+            if (updateAnotherSupplier.equalsIgnoreCase("Y")) {
+                deleteCategory();
+            } else {
+                categoryMenu();
+            }
+        } else {
+            deleteCategory();
+        }
+    }
+
 }
